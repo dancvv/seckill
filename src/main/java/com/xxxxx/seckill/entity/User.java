@@ -1,8 +1,6 @@
 package com.xxxxx.seckill.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,30 +14,30 @@ import java.util.Date;
  * @since 2022-04-25
  */
 @TableName("t_user")
-@ApiModel(value = "User对象", description = "")
+//@ApiModel(value = "User对象", description = "")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("用户id，手机号码")
+//    @ApiModelProperty("用户id，手机号码")
       private Long id;
 
     private String nickname;
 
-    @ApiModelProperty("MD5(MD5(PASSWORD))")
+//    @ApiModelProperty("MD5(MD5(PASSWORD))")
     private String password;
 
     private String slat;
 
     private String head;
 
-    @ApiModelProperty("注册时间")
+//    @ApiModelProperty("注册时间")
     private Date registerDate;
 
-    @ApiModelProperty("注册时间")
+//    @ApiModelProperty("注册时间")
     private Date lastLoginDate;
 
-    @ApiModelProperty("登录次数")
+//    @ApiModelProperty("登录次数")
     private Integer loginCount;
 
 

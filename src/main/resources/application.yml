@@ -38,3 +38,6 @@ mybatis-plus:
 logging:
   level:
     com.xxxxx.seckill.mapper: debug
+
+server:
+  port: 8868

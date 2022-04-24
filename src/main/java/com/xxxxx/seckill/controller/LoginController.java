@@ -1,5 +1,6 @@
 package com.xxxxx.seckill.controller;
 
+import com.xxxxx.seckill.vo.RespBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class LoginController {
         return "login";
     }
     @RequestMapping("/doLogin")
-    public String doLogin(){
-        return "login";
+    public RespBean doLogin(){
+        return RespBean.success();
     }
 }
