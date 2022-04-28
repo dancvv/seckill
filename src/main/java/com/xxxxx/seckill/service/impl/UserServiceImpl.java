@@ -31,12 +31,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public RespBean doLogin(LoginVo loginVo) {
         String mobile = loginVo.getMobile();
         String password = loginVo.getPassword();
-        if(!StringUtils.hasLength(mobile) || StringUtils.hasLength(password)){
-            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
-        }
-        if(!ValidatorUtil.isMobile(mobile)){
-            return RespBean.error(RespBeanEnum.MOBILE_ERROR);
-        }
+////        参数校验
+//        if(!StringUtils.hasLength(mobile) || StringUtils.hasLength(password)){
+//            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+//        }
+//        if(!ValidatorUtil.isMobile(mobile)){
+//            return RespBean.error(RespBeanEnum.MOBILE_ERROR);
+//        }
+//        根据手机号获取用户
         User user = userMapper.selectById(mobile);
         if(user == null){
             return RespBean.error(RespBeanEnum.MOBILE_ERROR);

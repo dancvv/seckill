@@ -9,7 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * @Author: wang
@@ -49,7 +50,7 @@ public class LoginController {
      */
     @RequestMapping("/doLogin")
     @ResponseBody
-    public RespBean doLogin(LoginVo loginVo){
+    public RespBean doLogin(@Valid LoginVo loginVo){
         log.info("{}", loginVo);
         return iUserService.doLogin(loginVo);
     }
