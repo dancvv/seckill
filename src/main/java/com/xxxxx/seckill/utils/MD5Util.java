@@ -3,6 +3,8 @@ package com.xxxxx.seckill.utils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 /**
  * @Author: wang
  * @Description: MD5工具类
