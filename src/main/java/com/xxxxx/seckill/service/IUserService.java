@@ -5,6 +5,9 @@ import com.xxxxx.seckill.entity.User;
 import com.xxxxx.seckill.vo.LoginVo;
 import com.xxxxx.seckill.vo.RespBean;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  *  服务类
@@ -23,5 +26,5 @@ public interface IUserService extends IService<User> {
      * @author: vang
      * @date: 2022/4/28
      */
-    RespBean doLogin(LoginVo loginVo);
+    RespBean doLogin(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response);
 }
