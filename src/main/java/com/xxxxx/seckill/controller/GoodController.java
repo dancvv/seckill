@@ -1,12 +1,16 @@
 package com.xxxxx.seckill.controller;
 
 import com.xxxxx.seckill.entity.User;
+import com.xxxxx.seckill.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -20,6 +24,8 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/goods")
 public class GoodController {
+    @Autowired
+    private IUserService userService;
     /**
      * 方法描述: 跳转商品页面
      * @since: 1.0
@@ -29,13 +35,14 @@ public class GoodController {
      * @date: 2022/4/29
      */
     @RequestMapping("toList")
-    public String toList(HttpSession session, Model model, @CookieValue("userTicket") String ticket){
+    public String toList(HttpServletRequest request, HttpServletResponse response, Model model, @CookieValue("userTicket") String ticket){
 //        通过session获取用户，并判断是否存在
         if(!StringUtils.hasLength(ticket)){
             return "login";
         }
-        System.out.println(session);
-        User user = (User) session.getAttribute(ticket);
+//        System.out.println(session);
+//        User user = (User) session.getAttribute(ticket);
+        User user = userService.getUserByCookie(ticket, request, response);
         if(null == user) return "login";
         model.addAttribute("user", user);
         return "goodsList";
