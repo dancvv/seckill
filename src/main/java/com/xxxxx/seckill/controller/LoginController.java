@@ -1,5 +1,6 @@
 package com.xxxxx.seckill.controller;
 
+import com.xxxxx.seckill.entity.User;
 import com.xxxxx.seckill.service.IUserService;
 import com.xxxxx.seckill.vo.LoginVo;
 import com.xxxxx.seckill.vo.RespBean;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -55,5 +57,11 @@ public class LoginController {
     public RespBean doLogin(@Valid LoginVo loginVo, HttpServletRequest request, HttpServletResponse response){
         log.info("{}", loginVo);
         return iUserService.doLogin(loginVo, request, response);
+    }
+    @GetMapping("logtest")
+    @ResponseBody
+    public RespBean loginTest(LoginVo loginVo){
+        User users = iUserService.getUsers(loginVo);
+        return RespBean.success(users);
     }
 }

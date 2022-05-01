@@ -20,7 +20,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
 //    @ApiModelProperty("用户id，手机号码")
-      private Long id;
+    private Long id;
 
     private String nickname;
 

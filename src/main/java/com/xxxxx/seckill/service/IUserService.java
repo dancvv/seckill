@@ -38,4 +38,5 @@ public interface IUserService extends IService<User> {
      * @date: 2022/4/30
      */
     User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response);
+    User getUsers(LoginVo loginVo);
 }

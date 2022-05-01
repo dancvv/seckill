@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 public class GoodController {
     @Autowired
     private IUserService userService;
+
     /**
      * 方法描述: 跳转商品页面
      * @since: 1.0
@@ -44,6 +45,19 @@ public class GoodController {
 //        User user = (User) session.getAttribute(ticket);
         User user = userService.getUserByCookie(ticket, request, response);
         if(null == user) return "login";
+        model.addAttribute("user", user);
+        return "goodsList";
+    }
+    /**
+     * 方法描述: 修改登录页面,去除参数传入，直接使用参数校验
+     * @since: 1.0
+     * @param:
+     * @return:
+     * @author: vang
+     * @date: 2022/5/1
+     */
+    @RequestMapping("ListDetail")
+    public String toLogin(Model model, User user){
         model.addAttribute("user", user);
         return "goodsList";
     }

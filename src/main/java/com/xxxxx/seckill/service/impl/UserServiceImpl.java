@@ -91,4 +91,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return user;
     }
+
+    @Override
+    public User getUsers(LoginVo loginVo) {
+        User user = userMapper.selectById(loginVo.getMobile());
+        return user;
+    }
 }

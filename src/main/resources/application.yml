@@ -6,7 +6,7 @@ spring:
 #    数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://210.30.97.238:3310/seckill?useUnicode=true&characterEndcoding=UTF-8&&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://49.233.56.74:3310/seckill?useUnicode=true&characterEndcoding=UTF-8&&serverTimezone=Asia/Shanghai
     username: root
     password: root
     hikari:
