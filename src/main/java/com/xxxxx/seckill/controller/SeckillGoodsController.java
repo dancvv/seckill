@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-05-11
  */
 @RestController
-@RequestMapping("/seckill-goods")
+@RequestMapping("/seckillGoods")
 public class SeckillGoodsController {
 
 }

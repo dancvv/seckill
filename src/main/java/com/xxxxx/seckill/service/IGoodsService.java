@@ -1,6 +1,11 @@
 package com.xxxxx.seckill.service;
 
+
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xxxxx.seckill.entity.Goods;
+import com.xxxxx.seckill.vo.GoodsVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,4 +17,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsService extends IService<Goods> {
 
+
+    /**
+     * 查找所有商品
+     * @return
+     */
+    List<GoodsVo> findGoodsVo();
 }
