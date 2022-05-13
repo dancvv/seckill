@@ -1,6 +1,7 @@
 package com.xxxxx.seckill.controller;
 
 import com.xxxxx.seckill.entity.User;
+import com.xxxxx.seckill.service.IGoodsService;
 import com.xxxxx.seckill.service.IUserService;
 import com.xxxxx.seckill.vo.LoginVo;
 import com.xxxxx.seckill.vo.RespBean;
@@ -30,6 +31,7 @@ public class LoginController {
 
     @Autowired
     private IUserService iUserService;
+
 
     /**
      * 方法描述: 功能登录界面

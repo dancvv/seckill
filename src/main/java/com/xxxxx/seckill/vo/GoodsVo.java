@@ -13,8 +13,24 @@ import java.util.Date;
 @NoArgsConstructor
 public class GoodsVo extends Goods {
 //    建立联查表
+
+    /**
+     * 秒杀价
+     */
     private BigDecimal seckillPrice;
+
+    /**
+     * 库存数量
+     */
     private Integer stockCount;
+
+    /**
+     * 秒杀开始时间
+     */
     private Date startDate;
+
+    /**
+     * 秒杀结束时间
+     */
     private Date endDate;
 }

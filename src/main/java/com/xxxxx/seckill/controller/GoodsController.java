@@ -1,17 +1,22 @@
 package com.xxxxx.seckill.controller;
 
+import com.xxxxx.seckill.entity.Goods;
 import com.xxxxx.seckill.entity.User;
 import com.xxxxx.seckill.service.IGoodsService;
 import com.xxxxx.seckill.service.IUserService;
+import com.xxxxx.seckill.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @Classname Controller
@@ -38,7 +43,7 @@ public class GoodsController {
      * @author: vang
      * @date: 2022/4/29
      */
-    @RequestMapping("toList")
+    @RequestMapping("toList2")
     public String toList(HttpServletRequest request, HttpServletResponse response, Model model, @CookieValue("userTicket") String ticket){
 //        通过session获取用户，并判断是否存在
         if(!StringUtils.hasLength(ticket)){
@@ -59,10 +64,17 @@ public class GoodsController {
      * @author: vang
      * @date: 2022/5/1
      */
-    @RequestMapping("ListDetail")
+    @RequestMapping("toList")
     public String toLogin(Model model, User user){
         model.addAttribute("user", user);
-        model.addAttribute("goodsList", goodsService.findGoodsVo());
+        System.out.println(goodsService.findGoodsVo());
+//        model.addAttribute("goodsList", goodsService.findGoodsVo());
         return "goodsList";
+    }
+    @GetMapping("/all")
+    @ResponseBody
+    public List<GoodsVo> all(){
+        List<GoodsVo> goodsVo = goodsService.findGoodsVo();
+        return goodsVo;
     }
 }

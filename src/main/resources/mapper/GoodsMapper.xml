@@ -13,4 +13,44 @@
         <result column="goods_stock" property="goodsStock" />
     </resultMap>
 
+<!--    通用查询结果列-->
+   <sql id="Base_Column_List">
+       id, goods_name, goods_title, goods_img, goods_detail, goods_price, goods_stock
+   </sql>
+
+    <select id="findGoodsVo" resultType="com.xxxxx.seckill.vo.GoodsVo">
+        select
+            g.id,
+            g.goods_name,
+            g.goods_title,
+            g.goods_img,
+            g.goods_detail,
+            g.goods_price,
+            g.goods_stock,
+            sg.seckill_price,
+            sg.stock_count,
+            sg.end_date
+        from
+            t_goods as g
+                left join t_seckill_goods as sg on g.id = sg.goods_id</select>
+
+    <select id="findsGoodsVoByGoodsId" resultMap="com.xxxxx.seckill.vo.GoodsVo">
+        select
+            g.id,
+            g.goods_name,
+            g.goods_title,
+            g.goods_img,
+            g.goods_detail,
+            g.goods_price,
+            g.goods_stock,
+            sg.seckill_price,
+            sg.stock_count,
+            sg.end_date,
+        from
+            t_goods as g
+                left join t_seckill_goods as sg on g.id = sg.good
+        where
+            g.id = #{goodsid}
+    </select>
+
 </mapper>

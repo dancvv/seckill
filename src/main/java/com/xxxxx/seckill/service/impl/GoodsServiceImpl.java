@@ -25,7 +25,17 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     private GoodsMapper goodsMapper;
     @Override
     public List<GoodsVo> findGoodsVo() {
-        goodsMapper.selectList();
-        return null;
+//        goodsMapper.selectList();
+        List<GoodsVo> goodsVo = goodsMapper.findGoodsVo();
+        for(GoodsVo list:goodsVo){
+            System.out.println(list);
+        }
+        return goodsVo;
+//        return goodsMapper.findGoodsVo();
+    }
+
+    @Override
+    public GoodsVo findGoodsVoByGoodsId(Long goodsId) {
+        return goodsMapper.findGoodsVoByGoodsId(goodsId);
     }
 }
