@@ -48,6 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 //        }
 //        根据手机号获取用户
         User user = userMapper.selectById(mobile);
+        System.out.println(user);
         if(null == user){
 //            return RespBean.error(RespBeanEnum.MOBILE_ERROR);
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);

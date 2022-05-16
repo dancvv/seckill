@@ -68,7 +68,7 @@ public class GoodsController {
     public String toLogin(Model model, User user){
         model.addAttribute("user", user);
         System.out.println(goodsService.findGoodsVo());
-//        model.addAttribute("goodsList", goodsService.findGoodsVo());
+        model.addAttribute("goodsList", goodsService.findGoodsVo());
         return "goodsList";
     }
     @GetMapping("/all")

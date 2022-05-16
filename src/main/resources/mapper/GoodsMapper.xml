@@ -13,12 +13,27 @@
         <result column="goods_stock" property="goodsStock" />
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="goodsVoResultMap" type="com.xxxxx.seckill.vo.GoodsVo">
+        <id column="id" property="id" />
+        <result column="goods_name" property="goodsName" />
+        <result column="goods_title" property="goodsTitle" />
+        <result column="goods_img" property="goodsImg" />
+        <result column="goods_detail" property="goodsDetail" />
+        <result column="goods_price" property="goodsPrice" />
+        <result column="goods_stock" property="goodsStock" />
+        <result column="seckill_price" property="seckillPrice" />
+        <result column="stock_count" property="stockCount" />
+        <result column="end_date" property="endDate" />
+    </resultMap>
+
+
 <!--    通用查询结果列-->
    <sql id="Base_Column_List">
        id, goods_name, goods_title, goods_img, goods_detail, goods_price, goods_stock
    </sql>
 
-    <select id="findGoodsVo" resultType="com.xxxxx.seckill.vo.GoodsVo">
+    <select id="findGoodsVo" resultMap="goodsVoResultMap" >
         select
             g.id,
             g.goods_name,
@@ -34,7 +49,7 @@
             t_goods as g
                 left join t_seckill_goods as sg on g.id = sg.goods_id</select>
 
-    <select id="findsGoodsVoByGoodsId" resultMap="com.xxxxx.seckill.vo.GoodsVo">
+    <select id="findsGoodsVoByGoodsId" resultMap="goodsVoResultMap">
         select
             g.id,
             g.goods_name,
