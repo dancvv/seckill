@@ -26,11 +26,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public List<GoodsVo> findGoodsVo() {
 //        goodsMapper.selectList();
-        List<GoodsVo> goodsVo = goodsMapper.findGoodsVo();
-        for(GoodsVo list:goodsVo){
-            System.out.println(list);
-        }
-        return goodsVo;
+        return goodsMapper.findGoodsVo();
 //        return goodsMapper.findGoodsVo();
     }
 

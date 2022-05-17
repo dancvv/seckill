@@ -47,9 +47,10 @@
             sg.end_date
         from
             t_goods as g
-                left join t_seckill_goods as sg on g.id = sg.goods_id</select>
+                left join t_seckill_goods as sg on g.id = sg.goods_id
+    </select>
 
-    <select id="findsGoodsVoByGoodsId" resultMap="goodsVoResultMap">
+    <select id="findGoodsVoByGoodsId" resultMap="goodsVoResultMap">
         select
             g.id,
             g.goods_name,
@@ -60,12 +61,11 @@
             g.goods_stock,
             sg.seckill_price,
             sg.stock_count,
-            sg.end_date,
+            sg.end_date
         from
             t_goods as g
-                left join t_seckill_goods as sg on g.id = sg.good
-        where
-            g.id = #{goodsid}
+                left join t_seckill_goods as sg on g.id = sg.goods_id
+        where g.id = #{goodsId}
     </select>
 
 </mapper>
