@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,6 +79,23 @@ public class GoodsController {
     public String findGoodsVoByGoodsId(Model model, User user, @PathVariable Long goodsId){
         model.addAttribute("user", user);
         GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
+        Date startDate = goodsVo.getStartDate();
+        Date endDate = goodsVo.getEndDate();
+        Date nowDate = new Date();
+        int secKillStatus = 0;
+        int remainSeconds = 0;
+//        判断秒杀逻辑
+        if(nowDate.before(startDate)){
+            remainSeconds = ((int) ((startDate.getTime() - nowDate.getTime()) / 1000));
+        }else if (nowDate.after(endDate)){
+            secKillStatus = 2;
+            remainSeconds = -1;
+        }else {
+            secKillStatus = 1;
+            remainSeconds = 0;
+        }
+        model.addAttribute("remainSeconds", remainSeconds);
+        model.addAttribute("seckillStatus", secKillStatus);
         model.addAttribute("goods", goodsVo);
         return "goodsDetail";
     }

@@ -24,6 +24,7 @@
         <result column="goods_stock" property="goodsStock" />
         <result column="seckill_price" property="seckillPrice" />
         <result column="stock_count" property="stockCount" />
+        <result column="start_date" property="startDate" />
         <result column="end_date" property="endDate" />
     </resultMap>
 
@@ -44,6 +45,7 @@
             g.goods_stock,
             sg.seckill_price,
             sg.stock_count,
+            sg.start_date,
             sg.end_date
         from
             t_goods as g
@@ -61,6 +63,7 @@
             g.goods_stock,
             sg.seckill_price,
             sg.stock_count,
+            sg.start_date,
             sg.end_date
         from
             t_goods as g
