@@ -85,11 +85,14 @@ public class GoodsController {
         int secKillStatus = 0;
         int remainSeconds;
 //        判断秒杀逻辑
+//        秒杀开始，当前时间超前开始时间
         if(nowDate.before(startDate)){
             remainSeconds = ((int) ((startDate.getTime() - nowDate.getTime()) / 1000));
+//            秒杀结束，当前时间落后于结束时间
         }else if (nowDate.after(endDate)){
             secKillStatus = 2;
             remainSeconds = -1;
+//            秒杀进行中
         }else {
             secKillStatus = 1;
             remainSeconds = 0;
