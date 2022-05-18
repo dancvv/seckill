@@ -83,7 +83,7 @@ public class GoodsController {
         Date endDate = goodsVo.getEndDate();
         Date nowDate = new Date();
         int secKillStatus = 0;
-        int remainSeconds = 0;
+        int remainSeconds;
 //        判断秒杀逻辑
         if(nowDate.before(startDate)){
             remainSeconds = ((int) ((startDate.getTime() - nowDate.getTime()) / 1000));

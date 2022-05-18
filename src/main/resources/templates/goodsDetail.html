@@ -5,7 +5,8 @@
      <meta charset="UTF-8">
      <title>商品详情</title>
      <!-- jquery -->
-     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<!--     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
      <!-- bootstrap -->
      <link rel="stylesheet" type="text/css"
            th:href="@{/bootstrap/css/bootstrap.min.css}"/>
@@ -42,7 +43,7 @@
              <td colspan="3" th:text="${goods.goodsPrice}"></td>
              <td id="seckillTip">
                  <input type="hidden" id="remainSeconds" th:value="${remainSeconds}">
-                 <span th:if="${seckillStatus eq 0}">秒杀倒计时：<span id="countDown" th:text="${remainSeconds}">秒</span></span>
+                 <span th:if="${seckillStatus eq 0}">秒杀倒计时：<span id="countDown" th:text="${remainSeconds}"></span>秒</span>
                  <span th:if="${seckillStatus eq 1}">秒杀进行中</span>
                  <span th:if="${seckillStatus eq 2}">秒杀已结束</span>
              </td>
@@ -62,10 +63,12 @@
     $(function () {
         countDown();
     })
-    var remainSeconds = $("#remainSeconds").val();
-    var timeout;
-//    秒杀还没开始，倒计时
+    // let remainSeconds = $("#remainSeconds").val();
+    // let timeout;
+    //    秒杀还没开始，倒计时
     function countDown() {
+        let remainSeconds = $("#remainSeconds").val();
+        let timeout;
         if(remainSeconds > 0){
             timeout = setTimeout(function () {
                 $("#countDown").text(remainSeconds - 1);
