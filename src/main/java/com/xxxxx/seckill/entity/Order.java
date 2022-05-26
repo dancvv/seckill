@@ -58,6 +58,11 @@ public class Order implements Serializable {
     private BigDecimal goodsPrice;
 
     /**
+     * 优先级
+     */
+    private Integer orderChannel;
+
+    /**
      * 订单状态，0新建未支付，1已支付，2已发货，3已收货，4已退款，5已完成
      */
     private Integer status;
@@ -72,6 +77,30 @@ public class Order implements Serializable {
      */
     private Date payDate;
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", goodsId=" + goodsId +
+                ", deliveryAddrId=" + deliveryAddrId +
+                ", goodsName='" + goodsName + '\'' +
+                ", goodsCount=" + goodsCount +
+                ", goodsPrice=" + goodsPrice +
+                ", orderChannel=" + orderChannel +
+                ", status=" + status +
+                ", createDate=" + createDate +
+                ", payDate=" + payDate +
+                '}';
+    }
+
+    public Integer getOrderChannel() {
+        return orderChannel;
+    }
+
+    public void setOrderChannel(Integer orderChannel) {
+        this.orderChannel = orderChannel;
+    }
 
     public Long getId() {
         return id;
@@ -153,19 +182,4 @@ public class Order implements Serializable {
         this.payDate = payDate;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-        "id=" + id +
-        ", userId=" + userId +
-        ", goodsId=" + goodsId +
-        ", deliveryAddrId=" + deliveryAddrId +
-        ", goodsName=" + goodsName +
-        ", goodsCount=" + goodsCount +
-        ", goodsPrice=" + goodsPrice +
-        ", status=" + status +
-        ", createDate=" + createDate +
-        ", payDate=" + payDate +
-        "}";
-    }
 }
