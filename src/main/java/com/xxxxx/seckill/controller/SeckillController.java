@@ -8,10 +8,8 @@ import com.xxxxx.seckill.service.IGoodsService;
 import com.xxxxx.seckill.service.IOrderService;
 import com.xxxxx.seckill.service.ISeckillGoodsService;
 import com.xxxxx.seckill.service.ISeckillOrderService;
-import com.xxxxx.seckill.service.impl.SeckillGoodsServiceImpl;
 import com.xxxxx.seckill.vo.GoodsVo;
 import com.xxxxx.seckill.vo.RespBeanEnum;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +26,14 @@ public class SeckillController {
     private IOrderService orderService;
     @Autowired
     private ISeckillOrderService seckillOrderService;
+
+    /**
+     * 秒杀功能
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @RequestMapping("/doSeckill")
     public String doSeckill(Model model, User user, Long goodsId){
         if(user == null){
@@ -45,7 +51,7 @@ public class SeckillController {
         SeckillOrder seckill = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
         if(seckill != null) {
             model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
-            return "serckillFail";
+            return "seckillFail";
         }
         Order order = orderService.seckill(user, goodsVo);
         model.addAttribute("order", order);

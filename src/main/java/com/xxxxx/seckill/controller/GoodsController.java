@@ -65,7 +65,7 @@ public class GoodsController {
     @RequestMapping("toList")
     public String toLogin(Model model, User user){
         model.addAttribute("user", user);
-        System.out.println(goodsService.findGoodsVo());
+//        System.out.println(goodsService.findGoodsVo());
         model.addAttribute("goodsList", goodsService.findGoodsVo());
         return "goodsList";
     }
