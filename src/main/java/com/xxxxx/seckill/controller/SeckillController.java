@@ -28,6 +28,8 @@ public class SeckillController {
     private ISeckillOrderService seckillOrderService;
 
     /**
+     * mac QPS:387.3
+     * linux QPS:345.7
      * 秒杀功能
      * @param model
      * @param user
