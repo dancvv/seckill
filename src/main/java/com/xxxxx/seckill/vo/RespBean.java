@@ -31,6 +31,7 @@ public class RespBean {
     }
 
     public static RespBean success(Object obj){
+//        使用枚举类型传参
         return new RespBean(RespBeanEnum.SUCCESS.getCode(), RespBeanEnum.SUCCESS.getMessage(),obj);
     }
 

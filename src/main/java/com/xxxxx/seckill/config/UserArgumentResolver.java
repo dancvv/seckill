@@ -43,6 +43,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
         }
 //        return null;
+//        redis 缓存用户
         return userService.getUserByCookie(ticket, request, response);
     }
 }
