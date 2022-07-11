@@ -5,6 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 方法描述: 订单详情返回对象
+ * @since: 1.0
+ * @param:
+ * @return:
+ * @author: vang
+ * @date: 2022/7/12
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

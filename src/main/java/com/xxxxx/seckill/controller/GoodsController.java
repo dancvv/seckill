@@ -154,9 +154,9 @@ public class GoodsController {
      * @param goodsId
      * @return
      */
-    @RequestMapping("toDetail/{goodsId}")
+    @RequestMapping("detail/{goodsId}")
     @ResponseBody
-    public RespBean toDetail(HttpServletRequest request, HttpServletResponse response, Model model, User user, @PathVariable Long goodsId){
+    public RespBean toDetail(Model model, User user, @PathVariable Long goodsId){
 //        查询用户，根据id
         GoodsVo goods = goodsService.findGoodsVoByGoodsId(goodsId);
         Date startDate = goods.getStartDate();
