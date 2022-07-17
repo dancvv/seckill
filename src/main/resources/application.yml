@@ -1,4 +1,15 @@
 spring:
+#  静态资源处理
+  resources:
+    add-mappings: true
+    cache:
+      cachecontrol:
+        max-age: 3600
+      chain:
+        cache:
+# 启动资源链
+  #        缓存相应时间，单位秒
+  #    启动默认静态资源处理，默认启用
 #  thymelaef配置
   thymeleaf:
 #    关闭缓存

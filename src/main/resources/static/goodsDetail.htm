@@ -41,10 +41,14 @@
                 <span id="secKillTip"></span>
             </td>
             <td>
-                <form id="secKillForm" method="post" action="/seckill/doSeckill">
-                    <input type="hidden" name="goodsId" id="goodsId"/>
-                    <button class="btn btn-block btn-block" type="submit" id="buyButton">立即秒杀</button>
-                </form>
+<!--                <form id="secKillForm" method="post" action="/seckill/doSeckill">-->
+<!--                    <input type="hidden" name="goodsId" id="goodsId"/>-->
+<!--                    <button class="btn btn-block btn-block" type="submit" id="buyButton">立即秒杀</button>-->
+<!--                </form>-->
+                    <button class="btn btn-block btn-block" type="button" id="buyButton" onclick="doSeckill()">立即秒杀
+<!--                    传入goodsId   -->
+                        <input type="hidden" name="goodsId" id="goodsId"/>
+                    </button>
             </td>
         </tr>
         <tr>
@@ -67,6 +71,26 @@
         // countDown();
         getDetails();
     })
+
+    // 秒杀
+    function doSeckill() {
+        $.ajax({
+            url:'/seckill/doSeckill',
+            type: 'POST',
+            data:{
+                goodsId:$("#goodsId").val()
+            },
+            success:function (data){
+                if(data.code == 200){
+                   window.location.href="/orderDetail?orderId="+data.obj.id;
+                }else{}
+            },
+            error:function (){
+                layer.msg("客户端请求错误");
+            }
+        })
+    }
+
     // let remainSeconds = $("#remainSeconds").val();
     // let timeout;
     //    秒杀还没开始，倒计时
@@ -74,7 +98,7 @@
     function getDetails() {
         var goodsId = g_getQueryString("goodsId");
         $.ajax({
-            url:"/goods/detail/"+goodsId,
+            url:"/goods/toDetail/"+goodsId,
             type: "GET",
             success: function(data){
                 if(data.code === 200){
@@ -90,6 +114,7 @@
     }
     // 缓存
     function render(detail) {
+        console.log(detail);
         var user = detail.user;
         var goods = detail.goodsVo;
         var remainSeconds= detail.remainSeconds;
