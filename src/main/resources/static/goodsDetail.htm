@@ -83,8 +83,10 @@
             success:function (data){
                 console.log(data)
                 console.log("output the value")
+                console.log(data.obj)
                 if(data.code == 200){
-                   window.location.href="/orderDetail?orderId="+data.obj.id;
+                    console.log(data.obj)
+                   window.location.href="/orderDetail.htm?orderId="+data.obj.goodsId;
                 }else{}
             },
             error:function (){

@@ -74,7 +74,7 @@ public class SeckillController {
      */
     @PostMapping("/doSeckill")
     @ResponseBody
-    public RespBean doSeckill(Model model, User user, Long goodsId){
+    public RespBean doSeckill(User user, Long goodsId){
         System.out.println("商品id");
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
@@ -83,14 +83,14 @@ public class SeckillController {
 //        判断是否有库存
         if(goodsVo.getStockCount() < 1){
 //            没有库存
-            model.addAttribute("errmsg", RespBeanEnum.EMPTY_STOCK.getMessage());
+//            model.addAttribute("errmsg", RespBeanEnum.EMPTY_STOCK.getMessage());
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
 //            视频进度9：22秒
         }
 //        判断是否重复抢购
         SeckillOrder seckill = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
         if(seckill != null) {
-            model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
+//            model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
             return RespBean.error(RespBeanEnum.REPEATE_ERROR);
         }
         Order order = orderService.seckill(user, goodsVo);
