@@ -6,7 +6,9 @@ spring:
       cachecontrol:
         max-age: 3600
       chain:
-        cache:
+        cache: true
+        enabled: true
+      static-locations: calsspath:/static/
 # 启动资源链
   #        缓存相应时间，单位秒
   #    启动默认静态资源处理，默认启用

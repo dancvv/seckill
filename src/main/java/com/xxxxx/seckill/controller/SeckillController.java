@@ -75,6 +75,7 @@ public class SeckillController {
     @PostMapping("/doSeckill")
     @ResponseBody
     public RespBean doSeckill(Model model, User user, Long goodsId){
+        System.out.println("商品id");
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }

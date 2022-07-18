@@ -31,7 +31,8 @@ public enum RespBeanEnum {
 
     PASSWORD_UPDATE_FAIL(500214, "密码更新失败"),
 
-    SESSION_ERROR(500215,"用户不存在");
+    SESSION_ERROR(500215,"用户不存在"),
+    ORDER_NOT_EXIST(500216,"订单不存在");
     private final Integer code;
     private final String message;
 }

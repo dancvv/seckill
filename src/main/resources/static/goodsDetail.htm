@@ -45,7 +45,7 @@
 <!--                    <input type="hidden" name="goodsId" id="goodsId"/>-->
 <!--                    <button class="btn btn-block btn-block" type="submit" id="buyButton">立即秒杀</button>-->
 <!--                </form>-->
-                    <button class="btn btn-block btn-block" type="button" id="buyButton" onclick="doSeckill()">立即秒杀
+                    <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doSeckill()">立即秒杀
 <!--                    传入goodsId   -->
                         <input type="hidden" name="goodsId" id="goodsId"/>
                     </button>
@@ -81,6 +81,8 @@
                 goodsId:$("#goodsId").val()
             },
             success:function (data){
+                console.log(data)
+                console.log("output the value")
                 if(data.code == 200){
                    window.location.href="/orderDetail?orderId="+data.obj.id;
                 }else{}
@@ -114,7 +116,7 @@
     }
     // 缓存
     function render(detail) {
-        console.log(detail);
+        // console.log(detail);
         var user = detail.user;
         var goods = detail.goodsVo;
         var remainSeconds= detail.remainSeconds;

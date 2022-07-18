@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.User;
 import com.xxxxx.seckill.vo.GoodsVo;
+import com.xxxxx.seckill.vo.OrderDetailVo;
 
 /**
  * <p>
@@ -22,4 +23,13 @@ public interface IOrderService extends IService<Order> {
      */
     Order seckill(User user, GoodsVo goods);
 
+    /**
+     * 方法描述: 订单详情
+     * @since: 1.0
+     * @param: []
+     * @return: com.xxxxx.seckill.vo.OrderDetailVo
+     * @author: vang
+     * @date: 2022/7/18
+     */
+    OrderDetailVo detail(Long orderId);
 }
