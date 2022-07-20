@@ -2,6 +2,8 @@ package com.xxxxx.seckill.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.SeckillGoods;
@@ -18,7 +20,9 @@ import com.xxxxx.seckill.vo.GoodsVo;
 import com.xxxxx.seckill.vo.OrderDetailVo;
 import com.xxxxx.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
@@ -44,17 +48,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private ISeckillOrderService seckillOrderService;
     @Autowired
     private IGoodsService goodsService;
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 秒杀
      * @param user
      * @param goods
      * @return
      */
+//    事务的注解
+    @Transactional
     @Override
     public Order seckill(User user, GoodsVo goods) {
+//        秒杀商品减库存
         SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
         seckillGoods.setStockCount(seckillGoods.getStockCount()-1);
-        seckillGoodsService.updateById(seckillGoods);
+        // 判断是否重复抢购
+        boolean seckillGoodsResult = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>().set("stock_count", seckillGoods.getId()).gt("stock_count", 0));
         Order order = new Order();
         order.setUserId(user.getId());
         order.setGoodsId(goods.getId());
@@ -72,6 +82,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         seckillOrder.setOrderId(order.getId());
         seckillOrder.setGoodsId(goods.getId());
         seckillOrderService.save(seckillOrder);
+//        存入redis中，方便读取
+        redisTemplate.opsForValue().set("order:"+user.getId()+":"+goods.getId(), seckillOrder);
         return order;
     }
 
@@ -90,7 +102,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }
         Order order = orderMapper.selectById(orderId);
         GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(order.getGoodsId());
-//        生成orderdetail的vo对象
+//        生成order detail的vo对象
         OrderDetailVo detail = new OrderDetailVo();
         detail.setGoodsVo(goodsVo);
         detail.setOrder(order);

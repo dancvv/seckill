@@ -12,6 +12,7 @@ import com.xxxxx.seckill.vo.GoodsVo;
 import com.xxxxx.seckill.vo.RespBean;
 import com.xxxxx.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,8 @@ public class SeckillController {
     private IOrderService orderService;
     @Autowired
     private ISeckillOrderService seckillOrderService;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * mac QPS:387.3
      * linux QPS:345.7
@@ -88,9 +90,13 @@ public class SeckillController {
 //            视频进度9：22秒
         }
 //        判断是否重复抢购
-        SeckillOrder seckill = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
-        if(seckill != null) {
+//        可以不用使用sql语句查询抢购订单
+//        SeckillOrder seckill = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+//        需要进行反序列化
+        SeckillOrder seckillOrder= (SeckillOrder)redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
+        if(seckillOrder != null) {
 //            model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
+//            42p,时间进度10:41
             return RespBean.error(RespBeanEnum.REPEATE_ERROR);
         }
         Order order = orderService.seckill(user, goodsVo);
