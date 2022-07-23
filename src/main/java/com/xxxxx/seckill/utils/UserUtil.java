@@ -15,6 +15,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/*
+ * 方法描述: 生成5000个用户，并存下cookie值
+ * @since: 1.0
+ * @param:
+ * @return:
+ * @author: vang
+ * @date: 2022/7/23
+ */
 public class UserUtil {
     private static void createUser(int count) throws Exception {
         List<User> users = new ArrayList<>(count);
@@ -30,26 +38,26 @@ public class UserUtil {
         }
         System.out.println("create user");
 //        插入数据库
-//        Connection connection = getConn();
-//        String sql = "insert into t_user(login_count, nickname, register_date, slat, password, id) values (?,?,?,?,?,?)";
-//        PreparedStatement pstmt = connection.prepareStatement(sql);
-//        System.out.println("用户长度"+users.size());
-//        for (User user : users) {
-//            pstmt.setInt(1, user.getLoginCount());
-//            pstmt.setString(2, user.getNickname());
-//            pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
-//            pstmt.setString(4, user.getSlat());
-//            pstmt.setString(5, user.getPassword());
-//            pstmt.setLong(6, user.getId());
-//            pstmt.addBatch();
-//        }
-//        pstmt.executeBatch();
-//        pstmt.close();
-//        connection.close();
+        Connection connection = getConn();
+        String sql = "insert into t_user(login_count, nickname, register_date, slat, password, id) values (?,?,?,?,?,?)";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        System.out.println("用户长度"+users.size());
+        for (User user : users) {
+            pstmt.setInt(1, user.getLoginCount());
+            pstmt.setString(2, user.getNickname());
+            pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
+            pstmt.setString(4, user.getSlat());
+            pstmt.setString(5, user.getPassword());
+            pstmt.setLong(6, user.getId());
+            pstmt.addBatch();
+        }
+        pstmt.executeBatch();
+        pstmt.close();
+        connection.close();
         System.out.println("inset to db");
         // 登录，生成token
         String urlString = "http://localhost:8868/login/doLogin";
-        File file = new File("/Users/wangwei162/Documents/config.csv");
+        File file = new File("/Users/weivang/Documents/config.csv");
         if(file.exists()){
             file.delete();
         }

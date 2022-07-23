@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
+
 @Controller
 @RequestMapping("seckill")
 public class SeckillController {
@@ -69,6 +71,7 @@ public class SeckillController {
      * mac QPS:387.3
      * linux QPS:345.7
      * 秒杀功能
+     * 数据库需要同步设置索引值
      * @param model
      * @param user
      * @param goodsId
@@ -77,10 +80,11 @@ public class SeckillController {
     @PostMapping("/doSeckill")
     @ResponseBody
     public RespBean doSeckill(User user, Long goodsId){
-        System.out.println("商品id");
+//        System.out.println(user);
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }
+//        System.out.println("user exist");
         GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
 //        判断是否有库存
         if(goodsVo.getStockCount() < 1){
@@ -94,11 +98,14 @@ public class SeckillController {
 //        SeckillOrder seckill = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
 //        需要进行反序列化
         SeckillOrder seckillOrder= (SeckillOrder)redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
+        System.out.println(seckillOrder);
         if(seckillOrder != null) {
 //            model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
 //            42p,时间进度10:41
+//            System.out.println("not ok");
             return RespBean.error(RespBeanEnum.REPEATE_ERROR);
         }
+//        System.out.println("start seckill");
         Order order = orderService.seckill(user, goodsVo);
         return RespBean.success(order);
     }

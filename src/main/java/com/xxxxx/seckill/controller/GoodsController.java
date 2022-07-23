@@ -70,6 +70,7 @@ public class GoodsController {
      * 方法描述: 修改登录页面,去除参数传入，直接使用参数校验
      * mac  优化前QPS：547.7
      *      缓存QPS：502.6
+     *      mac 14 medium QPS:1247.8
      * @since: 1.0
      * @param:
      * @return:
@@ -79,6 +80,7 @@ public class GoodsController {
     @RequestMapping(value = "toList", produces = "text/html;charset=utf-8")
     @ResponseBody
     public String toLogin(HttpServletRequest request, HttpServletResponse response, Model model, User user){
+//        System.out.println("print the response page");
         ValueOperations valueOperations = redisTemplate.opsForValue();
 //        Redis中获取页面，如果不为空，直接返回页面
         String html = (String) valueOperations.get("goodsList");

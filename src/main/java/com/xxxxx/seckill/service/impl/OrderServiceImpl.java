@@ -64,7 +64,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         SeckillGoods seckillGoods = seckillGoodsService.getOne(new QueryWrapper<SeckillGoods>().eq("goods_id", goods.getId()));
         seckillGoods.setStockCount(seckillGoods.getStockCount()-1);
         // 判断是否重复抢购
-        boolean seckillGoodsResult = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>().set("stock_count", seckillGoods.getId()).gt("stock_count", 0));
+//        boolean seckillGoodsResult = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>().set("stock_count", seckillGoods.getId()).gt("stock_count", 0));
+        boolean seckillGoodsResult = seckillGoodsService.update(new UpdateWrapper<SeckillGoods>()
+                .setSql("stock_count = "+"stock_count - 1")
+                .eq("goods_id", goods.getId())
+                .gt("stock_count", 0));
+        if(!seckillGoodsResult){
+            return null;
+        }
+//        生成订单
         Order order = new Order();
         order.setUserId(user.getId());
         order.setGoodsId(goods.getId());
