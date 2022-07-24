@@ -70,6 +70,8 @@ public class SeckillController {
     /**
      * mac QPS:387.3
      * linux QPS:345.7
+     * linux 优化之后的QPS:399.8
+     * 优化之后的代码，QPS提升15.7%
      * 秒杀功能
      * 数据库需要同步设置索引值
      * @param model
