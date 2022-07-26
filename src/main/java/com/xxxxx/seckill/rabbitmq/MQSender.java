@@ -20,6 +20,23 @@ public class MQSender {
 
     public void send(Object msg){
         log.info("发送消息："+ msg);
-        rabbitTemplate.convertAndSend("fanoutExchange", msg);
+        rabbitTemplate.convertAndSend("fanoutExchange","", msg);
+    }
+
+    /*
+     * 方法描述: 发送消息给接收机
+     * @since: 1.0
+     * @param: [msg]
+     * @return: void
+     * @author: weivang
+     * @date: 2022/7/27
+     */
+    public void send01(Object msg){
+        log.info("发送green消息" + msg);
+        rabbitTemplate.convertAndSend("directExchange", "queue.green", msg);
+    }
+    public void send02(Object msg){
+        log.info("发送green消息" + msg);
+        rabbitTemplate.convertAndSend("directExchange", "queue.green", msg);
     }
 }

@@ -18,19 +18,45 @@ import org.springframework.stereotype.Service;
 public class MQReceiver {
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    /*
+     * 方法描述: convertAndSend不适合在此处引入，会出现重大bug
+     * @since: 1.0
+     * @param: [msg]
+     * @return: void
+     * @author: weivang
+     * @date: 2022/7/25
+     */
     @RabbitListener(queues = "queue")
     public void receive(Object msg){
         log.info("接收消息：" + msg);
-        rabbitTemplate.convertAndSend("queue", msg);
+        //rabbitTemplate.convertAndSend("queue", msg);
     }
 
-    @RabbitListener(queues = "queue_fanout01")
+    //@RabbitListener(queues = "queue_fanout01")
+    //public void receive01(Object msg){
+    //    log.info("QUEUE01接收消息:" + msg);
+    //}
+    //
+    //@RabbitListener(queues = "queue_fanout02")
+    //public void receive02(Object msg){
+    //    log.info("QUEUE02接收消息：" + msg);
+    //}
+    /*
+     * 方法描述: direct模式下的消息接受
+     * @since: 1.0
+     * @param: [msg]
+     * @return: void
+     * @author: weivang
+     * @date: 2022/7/27
+     */
+    @RabbitListener(queues = "queue_direct01")
     public void receive01(Object msg){
-        log.info("QUEUE01接收消息:" + msg);
+        log.info("QUEUE01接收消息：" + msg);
     }
 
-    @RabbitListener(queues = "queue_fanout02")
+    @RabbitListener(queues = "queue_direct02")
     public void receive02(Object msg){
-        log.info("QUEUE02接收消息：" + msg);
+        log.info("QUEUE01接收消息：" + msg);
     }
 }
