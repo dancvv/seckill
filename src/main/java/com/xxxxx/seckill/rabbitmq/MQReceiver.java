@@ -59,4 +59,21 @@ public class MQReceiver {
     public void receive02(Object msg){
         log.info("QUEUE01接收消息：" + msg);
     }
+    /*
+     * 方法描述: mq 接受消息
+     * @since: 1.0
+     * @param: [msg]
+     * @return: void
+     * @author: weivang
+     * @date: 2022/7/27
+     */
+    @RabbitListener(queues = "queue_topic01")
+    public void receiveMQ1(Object msg){
+        log.info("QUEUE01接收消息：" + msg);
+    }
+
+    @RabbitListener(queues = "queue_topic02")
+    public void receiveMQ2(Object msg){
+        log.info("QUEUE02 OK接收消息：" + msg);
+    }
 }

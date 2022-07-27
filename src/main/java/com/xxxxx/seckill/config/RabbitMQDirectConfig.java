@@ -17,48 +17,48 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMQDirectConfig {
-
-    private static final String QUEUE01 = "queue_direct01";
-    private static final String QUEUE02 = "queue_direct02";
-    private static final String EXCHANGE = "directExchange";
-    private static final String ROUTINGKEY01 = "queue.red";
-    private static final String ROUTINGKEY02 = "queue.green";
-
-    @Bean
-    public Queue queue01(){
-        return new Queue(QUEUE01);
-    }
-    @Bean
-    public Queue queue02(){
-        return new Queue(QUEUE02);
-    }
-
-    /*
-     * 方法描述: 直接交换机
-     * @since: 1.0
-     * @param: []
-     * @return: org.springframework.amqp.core.DirectExchange
-     * @author: weivang
-     * @date: 2022/7/27
-     */
-    @Bean
-    public DirectExchange directExchange(){
-        return new DirectExchange(EXCHANGE);
-    }
-    /*
-     * 方法描述: 绑定路由，相应的routing key
-     * @since: 1.0
-     * @param: []
-     * @return: org.springframework.amqp.core.Binding
-     * @author: weivang
-     * @date: 2022/7/27
-     */
-    @Bean
-    public Binding binding01(){
-        return BindingBuilder.bind(queue01()).to(directExchange()).with(ROUTINGKEY01);
-    }
-    @Bean
-    public Binding binding02(){
-        return BindingBuilder.bind(queue02()).to(directExchange()).with(ROUTINGKEY02);
-    }
+    //
+    //private static final String QUEUE01 = "queue_direct01";
+    //private static final String QUEUE02 = "queue_direct02";
+    //private static final String EXCHANGE = "directExchange";
+    //private static final String ROUTINGKEY01 = "queue.red";
+    //private static final String ROUTINGKEY02 = "queue.green";
+    //
+    //@Bean
+    //public Queue queue01(){
+    //    return new Queue(QUEUE01);
+    //}
+    //@Bean
+    //public Queue queue02(){
+    //    return new Queue(QUEUE02);
+    //}
+    //
+    ///*
+    // * 方法描述: 直接交换机
+    // * @since: 1.0
+    // * @param: []
+    // * @return: org.springframework.amqp.core.DirectExchange
+    // * @author: weivang
+    // * @date: 2022/7/27
+    // */
+    //@Bean
+    //public DirectExchange directExchange(){
+    //    return new DirectExchange(EXCHANGE);
+    //}
+    ///*
+    // * 方法描述: 绑定路由，相应的routing key
+    // * @since: 1.0
+    // * @param: []
+    // * @return: org.springframework.amqp.core.Binding
+    // * @author: weivang
+    // * @date: 2022/7/27
+    // */
+    //@Bean
+    //public Binding binding01(){
+    //    return BindingBuilder.bind(queue01()).to(directExchange()).with(ROUTINGKEY01);
+    //}
+    //@Bean
+    //public Binding binding02(){
+    //    return BindingBuilder.bind(queue02()).to(directExchange()).with(ROUTINGKEY02);
+    //}
 }
