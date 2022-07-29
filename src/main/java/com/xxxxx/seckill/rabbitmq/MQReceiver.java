@@ -1,6 +1,7 @@
 package com.xxxxx.seckill.rabbitmq;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,4 +77,25 @@ public class MQReceiver {
     public void receiveMQ2(Object msg){
         log.info("QUEUE02 OK接收消息：" + msg);
     }
+
+    /*
+     * 方法描述: header模式下接受消息
+     * @since: 1.0
+     * @param: [message]
+     * @return: void
+     * @author: weivang
+     * @date: 2022/7/28
+     */
+    @RabbitListener(queues = "queue_header01")
+    public void receive01(Message message){
+        log.info("QUEUE01接受Message对象：" + message);
+        log.info("QUEUE01接受消息：" + new String(message.getBody()));
+    }
+
+    @RabbitListener(queues = "queue_header02")
+    public void receive02(Message message){
+        log.info("QUEUE02接受Message对象：" + message);
+        log.info("QUEUE02接受消息：" + new String(message.getBody()));
+    }
+
 }

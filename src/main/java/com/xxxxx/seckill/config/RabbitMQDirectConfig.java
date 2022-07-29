@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2022/7/27 12:52 AM
  * @Created by weivang
  */
-@Configuration
+//@Configuration
 public class RabbitMQDirectConfig {
     //
     //private static final String QUEUE01 = "queue_direct01";

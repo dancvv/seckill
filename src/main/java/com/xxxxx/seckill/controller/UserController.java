@@ -69,7 +69,6 @@ public class UserController {
         mqSender.send02("Hello, this is from direct 02");
     }
     /*
-     * 方法描述: topic消息发送测试
      * @since: 1.0
      * @param: []
      * @return: void
@@ -85,4 +84,20 @@ public class UserController {
         mqSender.send04("hello, message from green");
     }
 
+    /*
+     * 方法描述: Header发送MQ消息
+     * @since: 1.0
+     * @param: []
+     * @return: void
+     * @author: weivang
+     * @date: 2022/7/28
+     */
+    @GetMapping("/mq/header01")
+    public void mqHeader01() {
+        mqSender.sendHeader01("Hello, header01 coming");
+    }
+    @GetMapping("/mq/header02")
+    public void mqHeader02() {
+        mqSender.sendHeader02("Hello, header02 coming");
+    }
 }

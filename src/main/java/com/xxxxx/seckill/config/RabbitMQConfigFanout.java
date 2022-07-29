@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2022/7/24 5:27 PM
  * @Created by weivang
  */
-@Configuration
+//@Configuration
 public class RabbitMQConfigFanout {
     //private static final String QUEUE01 = "queue_fanout01";
     //private static final String QUEUE02 = "queue_fanout02";
