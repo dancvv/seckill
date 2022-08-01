@@ -84,4 +84,17 @@ public class MQSender {
         Message message = new Message(msg.getBytes(), properties);
         rabbitTemplate.convertAndSend("headersExchange", "", message);
     }
+
+    /*
+     * 方法描述: 发送秒杀信息
+     * @since: 1.0
+     * @param: [message]
+     * @return: void
+     * @author: weivang
+     * @date: 2022/8/2
+     */
+    public void sendSeckillMessage(String message){
+        log.info("发送消息："+ message);
+        rabbitTemplate.convertAndSend("seckillExchange", "seckill.message", message);
+    }
 }
