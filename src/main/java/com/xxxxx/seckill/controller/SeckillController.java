@@ -21,6 +21,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,24 +127,27 @@ public class SeckillController implements InitializingBean {
          */
         ValueOperations valueOperations = redisTemplate.opsForValue();
         // 判断是否重复抢购
-        SeckillOrder seckillOrder = (SeckillOrder) redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
-        if(seckillOrder != null){
+        String seckillOrder = (String) redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
+        if(StringUtils.hasLength(seckillOrder)){
             return RespBean.error(RespBeanEnum.REPEATE_ERROR);
         }
-        // 内存标记，减少redis的访问
+        // 内存标记，减少redis的访问，标记是否还有库存，可不可以抢购
         if(EmptyStockMap.get(goodsId)){
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         // 预减库存
         Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
         if(stock < 0){
+            EmptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         // 接入mq，消息消费
+        // 请求入队，立即返回排队中
         SeckillMessage seckillMessage = new SeckillMessage(user, goodsId);
         mqSender.sendSeckillMessage(JsonUtil.object2JsonStr(seckillMessage));
-        return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        return RespBean.success(0);
+        //return RespBean.error(RespBeanEnum.SESSION_ERROR);
     }
     /*
      * 方法描述: 获取秒杀结果
@@ -155,10 +159,12 @@ public class SeckillController implements InitializingBean {
      * @date: 2022/8/1
      */
     @GetMapping("/result")
+    @ResponseBody
     public RespBean getResult(User user, Long goodsId){
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }
+        // 返回订单数
         Long orderId = seckillOrderService.getResult(user, goodsId);
         return RespBean.success(orderId);
     }
