@@ -163,7 +163,7 @@ public class SeckillController implements InitializingBean {
         /* 不在采用该方法
         Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
          */
-        Long stock = (Long) redisTemplate.execute(script, Collections.singletonList("seckillGoods" + goodsId), Collections.EMPTY_LIST);
+        Long stock = (Long) redisTemplate.execute(script, Collections.singletonList("seckillGoods" + goodsId));
         if(stock < 0){
             EmptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
