@@ -1,9 +1,7 @@
 package com.xxxxx.seckill.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.SeckillGoods;
@@ -15,7 +13,8 @@ import com.xxxxx.seckill.service.IGoodsService;
 import com.xxxxx.seckill.service.IOrderService;
 import com.xxxxx.seckill.service.ISeckillGoodsService;
 import com.xxxxx.seckill.service.ISeckillOrderService;
-import com.xxxxx.seckill.vo.DetailVo;
+import com.xxxxx.seckill.utils.MD5Util;
+import com.xxxxx.seckill.utils.UUIDUtil;
 import com.xxxxx.seckill.vo.GoodsVo;
 import com.xxxxx.seckill.vo.OrderDetailVo;
 import com.xxxxx.seckill.vo.RespBeanEnum;
@@ -24,11 +23,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -124,5 +122,31 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         detail.setGoodsVo(goodsVo);
         detail.setOrder(order);
         return detail;
+    }
+
+    /*
+     * 方法描述: 获取秒杀地址
+     * @since: 1.0
+     * @param: [user, goodsId]
+     * @return: java.lang.String
+     * @author: weivang
+     * @date: 2022/8/7
+     */
+    @Override
+    public String createPath(User user, Long goodsId) {
+        //UUID,加密
+        String str = MD5Util.md5(UUIDUtil.uuid() + "123456");
+        // 路径存入redis
+        redisTemplate.opsForValue().set("seckillPath:" + user.getId() + ":" + goodsId, str, 60, TimeUnit.SECONDS);
+        return str;
+    }
+
+    @Override
+    public boolean checkPath(User user, Long goodsId, String path) {
+        if(user == null || goodsId < 0 || !StringUtils.hasLength(path)){
+            return false;
+        }
+        String redisPath = (String) redisTemplate.opsForValue().get("seckillPath:" + user.getId() + ":" + goodsId);
+        return path.equals(redisPath);
     }
 }

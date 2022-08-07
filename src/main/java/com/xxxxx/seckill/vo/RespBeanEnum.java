@@ -30,9 +30,9 @@ public enum RespBeanEnum {
     MOBILE_NOT_EXIST(500213, "手机号码不存在"),
 
     PASSWORD_UPDATE_FAIL(500214, "密码更新失败"),
-
     SESSION_ERROR(500215,"用户不存在"),
-    ORDER_NOT_EXIST(500216,"订单不存在");
+    ORDER_NOT_EXIST(500216,"订单不存在"),
+    REQUEST_ILLEGAL(500502, "请求非法，请重新尝试");
     private final Integer code;
     private final String message;
 }

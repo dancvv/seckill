@@ -3,6 +3,7 @@ package com.xxxxx.seckill.controller;
 import com.xxxxx.seckill.entity.User;
 import com.xxxxx.seckill.rabbitmq.MQSender;
 import com.xxxxx.seckill.vo.RespBean;
+import com.xxxxx.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class UserController {
      */
     @RequestMapping("/info")
     public RespBean info(User user){
+        if(user == null) return RespBean.error(RespBeanEnum.ERROR, "empty user");
         return RespBean.success(user);
     }
 

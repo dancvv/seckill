@@ -1,6 +1,7 @@
 package com.xxxxx.seckill.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xxxxx.seckill.config.RedisConfig;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.SeckillMessage;
 import com.xxxxx.seckill.entity.SeckillOrder;
@@ -18,19 +19,14 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("seckill")
@@ -47,8 +43,28 @@ public class SeckillController implements InitializingBean {
     private RedisTemplate redisTemplate;
     @Autowired
     private MQSender mqSender;
+    @Autowired
+    private RedisScript<Long> script;
     //内存优化，使用map内存标记
     private Map<Long, Boolean> EmptyStockMap = new HashMap<>();
+    /*
+     * 方法描述: 获取路径
+     * @since: 1.0
+     * @param: [user, goodsId]
+     * @return: com.xxxxx.seckill.vo.RespBean
+     * @author: weivang
+     * @date: 2022/8/7
+     */
+    @GetMapping("/path")
+    @ResponseBody
+    public RespBean getPath(User user, Long goodsId){
+        if(user == null){
+            return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        String str = orderService.createPath(user, goodsId);
+        return RespBean.success(str);
+
+    }
     /**
      * mac QPS:387.3
      * linux QPS:345.7
@@ -87,6 +103,9 @@ public class SeckillController implements InitializingBean {
      * linux QPS:345.7
      * linux 优化之后的QPS:399.8
      * 优化之后的代码，QPS提升15.7%
+     * mq优化：QPS:543.8
+     * 历史错误优化，是由于服务器版本未更新
+     * mac 14 medium 优化之后 QPS:237.8
      * 秒杀功能
      * 数据库需要同步设置索引值
      * @param
@@ -94,12 +113,18 @@ public class SeckillController implements InitializingBean {
      * @param goodsId
      * @return
      */
-    @PostMapping("/doSeckill")
+    @PostMapping("/{path}/doSeckill")
     @ResponseBody
-    public RespBean doSeckill(User user, Long goodsId){
+    public RespBean doSeckill(@PathVariable String path, User user, Long goodsId){
 //        System.out.println(user);
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        // 判断是否存在uuid，根据这个来判断是否进行下面的秒杀
+        boolean check = orderService.checkPath(user, goodsId, path);
+        if (!check) {
+            return RespBean.error(RespBeanEnum.REQUEST_ILLEGAL);
         }
         /*
         GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
@@ -125,7 +150,6 @@ public class SeckillController implements InitializingBean {
         Order order = orderService.seckill(user, goodsVo);
         return RespBean.success(order);
          */
-        ValueOperations valueOperations = redisTemplate.opsForValue();
         // 判断是否重复抢购
         String seckillOrder = (String) redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
         if(StringUtils.hasLength(seckillOrder)){
@@ -136,7 +160,10 @@ public class SeckillController implements InitializingBean {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         // 预减库存
+        /* 不在采用该方法
         Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
+         */
+        Long stock = (Long) redisTemplate.execute(script, Collections.singletonList("seckillGoods" + goodsId), Collections.EMPTY_LIST);
         if(stock < 0){
             EmptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
