@@ -44,4 +44,14 @@ public interface IOrderService extends IService<Order> {
      * @date: 2022/8/7
      */
     boolean checkPath(User user, Long goodsId, String path);
+
+    /*
+     * 方法描述: 校验验证码
+     * @since: 1.0
+     * @param: [user, goodsId, captcha]
+     * @return: java.lang.Boolean
+     * @author: weivang
+     * @date: 2022/8/13
+     */
+    Boolean checkCaptcha(User user, Long goodsId, String captcha);
 }

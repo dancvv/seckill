@@ -3,7 +3,6 @@ package com.xxxxx.seckill.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wf.captcha.ArithmeticCaptcha;
-import com.xxxxx.seckill.config.RedisConfig;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.SeckillMessage;
 import com.xxxxx.seckill.entity.SeckillOrder;
@@ -65,9 +64,13 @@ public class SeckillController implements InitializingBean {
      */
     @GetMapping("/path")
     @ResponseBody
-    public RespBean getPath(User user, Long goodsId){
+    public RespBean getPath(User user, Long goodsId, String captcha){
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        Boolean check = orderService.checkCaptcha(user, goodsId, captcha);
+        if(!check){
+            return RespBean.error(RespBeanEnum.ERROR_CAPTCHA);
         }
         String str = orderService.createPath(user, goodsId);
         return RespBean.success(str);
