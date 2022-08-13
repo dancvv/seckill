@@ -1,11 +1,14 @@
 package com.xxxxx.seckill.controller;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wf.captcha.ArithmeticCaptcha;
 import com.xxxxx.seckill.config.RedisConfig;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.SeckillMessage;
 import com.xxxxx.seckill.entity.SeckillOrder;
 import com.xxxxx.seckill.entity.User;
+import com.xxxxx.seckill.exception.GlobalException;
 import com.xxxxx.seckill.rabbitmq.MQSender;
 import com.xxxxx.seckill.service.IGoodsService;
 import com.xxxxx.seckill.service.IOrderService;
@@ -15,6 +18,7 @@ import com.xxxxx.seckill.utils.JsonUtil;
 import com.xxxxx.seckill.vo.GoodsVo;
 import com.xxxxx.seckill.vo.RespBean;
 import com.xxxxx.seckill.vo.RespBeanEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,10 +30,14 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Controller
-@RequestMapping("seckill")
+@RequestMapping("/seckill")
+@Slf4j
 public class SeckillController implements InitializingBean {
     @Autowired
     private IGoodsService goodsService;
@@ -163,7 +171,7 @@ public class SeckillController implements InitializingBean {
         /* 不在采用该方法
         Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
          */
-        Long stock = (Long) redisTemplate.execute(script, Collections.singletonList("seckillGoods" + goodsId));
+        Long stock = (Long) redisTemplate.execute(script, Collections.singletonList("seckillGoods:" + goodsId));
         if(stock < 0){
             EmptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
@@ -196,6 +204,27 @@ public class SeckillController implements InitializingBean {
         return RespBean.success(orderId);
     }
 
+    @RequestMapping(value = "/captcha", method = RequestMethod.GET)
+    public void verifyCode(User user, @RequestParam Long goodsId, HttpServletResponse response){
+        System.out.println("out goodsId");
+        System.out.println(goodsId);
+        if(user == null || goodsId < 0){
+            throw new GlobalException(RespBeanEnum.REQUEST_ILLEGAL);
+        }
+    //    设置请求头为输出图片的类型
+        response.setContentType("image/jpg");
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        // 生成验证码，将结果存入redis
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 32, 3);
+        redisTemplate.opsForValue().set("captcha:" + user.getId() + ":" + goodsId, captcha.text(), 300, TimeUnit.SECONDS);
+        try {
+            captcha.out(response.getOutputStream());
+        } catch (IOException e) {
+            log.error("验证码生成失败", e.getMessage());
+        }
+    }
     /*
      * 方法描述: bean的实例化时间
      * @since: 1.0
