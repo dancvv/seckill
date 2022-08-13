@@ -32,7 +32,8 @@ public enum RespBeanEnum {
     SESSION_ERROR(500215,"用户不存在"),
     ORDER_NOT_EXIST(500216,"订单不存在"),
     REQUEST_ILLEGAL(500502, "请求非法，请重新尝试"),
-    ERROR_CAPTCHA(500503, "验证码错误，请重新输入");
+    ERROR_CAPTCHA(500503, "验证码错误，请重新输入"),
+    ACCESS_LIMIT_REACHED(500504, "访问过于频繁,请稍后再试");
     private final Integer code;
     private final String message;
 }
