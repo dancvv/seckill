@@ -3,6 +3,7 @@ package com.xxxxx.seckill.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wf.captcha.ArithmeticCaptcha;
+import com.xxxxx.seckill.config.AccessLimit;
 import com.xxxxx.seckill.entity.Order;
 import com.xxxxx.seckill.entity.SeckillMessage;
 import com.xxxxx.seckill.entity.SeckillOrder;
@@ -57,18 +58,22 @@ public class SeckillController implements InitializingBean {
     private Map<Long, Boolean> EmptyStockMap = new HashMap<>();
     /*
      * 方法描述: 获取路径
+     * 使用注解
      * @since: 1.0
      * @param: [user, goodsId]
      * @return: com.xxxxx.seckill.vo.RespBean
      * @author: weivang
      * @date: 2022/8/7
      */
+    @AccessLimit(second = 5, maxCount = 5, needLogin = true)
     @GetMapping("/path")
     @ResponseBody
     public RespBean getPath(User user, Long goodsId, String captcha, HttpServletRequest request){
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }
+        /*
+        * 使用注解优化
         ValueOperations valueOperations = redisTemplate.opsForValue();
         // 限制访问次数，5s内访问5次
         String uri = request.getRequestURI();
@@ -82,6 +87,7 @@ public class SeckillController implements InitializingBean {
             // 如果点击超过5次
             return RespBean.error(RespBeanEnum.ACCESS_LIMIT_REACHED);
         }
+         */
         Boolean check = orderService.checkCaptcha(user, goodsId, captcha);
         if(!check){
             return RespBean.error(RespBeanEnum.ERROR_CAPTCHA);
